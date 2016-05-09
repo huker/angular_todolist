@@ -12,9 +12,9 @@
 <body ng-controller="todoCtrl">
 <div class="container">
     <div class="row">
-        <div class="col-md-offset-2 col-md-8">
+        <div class="col-md-offset-3 col-md-6">
             <div class="jumbotron text-center">
-                <h1><label class="label label-primary">你有{{}}个代办事项</label></h1>
+                <h1><label class="label label-primary">你有{{todos.length}}个代办事项</label></h1>
             </div>
         </div>
     </div>
@@ -66,13 +66,12 @@
 
     });
     angular.module('todoModule').controller('todoCtrl', function ($scope,todoService) {
-        $scope.todos = [{"_id": 1, "text": "学node"}, {"_id": 2, "text": "学angular"}];
         $scope.todo = {};
+        //列出清单
+        todoService.list().success(function(data){
+            $scope.todos = data;
+        });
         $scope.addTodo = function(){
-            //列出清单
-            todoService.list().success(function(data){
-                $scope.todos = data;
-            });
             //添加
             todoService.add($scope.todo).success(function(todo){
                 $scope.todos.push(todo);
