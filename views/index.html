@@ -35,14 +35,13 @@
         <div class="col-md-offset-2 col-md-8 text-center">
             <form>
                 <div class="form-group">
-                    <label for="text">新建事项</label>
+                    <label for="text">新的事项</label>
                     <input type="text" id="text" ng-model="todo.text" class="form-control"/>
                 </div>
                 <div class="form-group">
                     <button class="btn btn-primary" ng-click="addTodo()">添加</button>
                     <button class="btn btn-danger" ng-click="delTodo()">批量删除</button>
                 </div>
-
             </form>
         </div>
     </div>
@@ -54,8 +53,32 @@
 <script src="/lib/angular/angular.js"></script>
 <script>
     angular.module('todoModule', []);
-    angular.module('todoModule').controller('todoCtrl', function ($scope) {
-        $scope.todos = [{"_id": 1, "text": "学node"}, {"_id": 1, "text": "学angular"}]
+    angular.module('todoModule').factory('todoService',function($http){
+        return{
+            list:function(){
+                return $http.get('/todo');
+            },
+            add:function(data){
+                //data放在请求体里
+                return $http.post('/todo',data);
+            }
+        }
+
+    });
+    angular.module('todoModule').controller('todoCtrl', function ($scope,todoService) {
+        $scope.todos = [{"_id": 1, "text": "学node"}, {"_id": 2, "text": "学angular"}];
+        $scope.todo = {};
+        $scope.addTodo = function(){
+            //列出清单
+            todoService.list().success(function(data){
+                $scope.todos = data;
+            });
+            //添加
+            todoService.add($scope.todo).success(function(todo){
+                $scope.todos.push(todo);
+                $scope.todo = {};
+            });
+        };
     })
 </script>
 </html>
