@@ -1,5 +1,7 @@
-# 待办事项
-bootstrap+angular+express+mongoose+restful
+# 待办事项demo
+>前 bootstrap+angular
+>
+>后 express+mongoose 接口风格restful
 
 ## 安装项目
 ```
